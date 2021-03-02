@@ -5,7 +5,7 @@ import re
 
 srsFile=sys.argv[1]
 
-
+#this program take as entry a srsfile from emboss needle alignment and parse it in order to calculate a new score
 
 class ParseNeedle():
     def __init__(self,name_seq, name_seq_target,length,number_of_seq,score,align_ref,align,align_seq,correct_nb_seq):
@@ -89,6 +89,4 @@ def parseFilesrs(fileIN):
     calcul_new_score(read)
     return(read, nb_seq, total_nb_corrected)
 
-#read,seq_nb = parseFilesrs(srsFile)
-#for element in read :
-#    print(read[element].new_score)                    
+                   
