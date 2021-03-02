@@ -3,17 +3,14 @@
 import sys 
 import re
 
-#file_input = sys.argv[1]
-#file_output = sys.argv[2]
+#Program to handle tag which are the first and the last 5 nt of the sequence, create a dict that get the different sequence of tag and their numbers
 
 def handle_tag(input_file, output_file) :
     with open(input_file,'r') as qcfile, open(output_file,'w') as tagfile:
         dico_seq_tag = {}
         for line in qcfile:
             line=line.rstrip()
-            #print(line)
             element = line.split(':')
-            #print(element)
             tag = element[0][:5]+'+'+element[0][-5:]
             cut_seq = element[0][5:-5]
             if cut_seq not in dico_seq_tag :
