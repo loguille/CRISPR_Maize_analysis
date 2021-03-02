@@ -7,7 +7,7 @@ import os.path
 import re
 
 #Change this path to import the different program used from an other directory
-sys.path.insert(1, '/projects/SeedDev/CRISPR_NGS_2019/loic/CRISPMais/Projet_CRISPR_MAIS')
+sys.path.insert(1, '/lib/')
 
 import countFrequenceFromSRS
 import tag_handling
@@ -271,9 +271,6 @@ for i in range(len(os.listdir(path_log+'/Aligner/'))) :
         read_kept.write("Number of unique mutations : "+os.path.basename(sequence_target[i]).split('.')[0]+' '+str(nb_mut)+'\n')
     output_logo = path_log+'/logo/'+os.path.basename(sequence_target[i]).split('.')[0]+'logo.svg'
     creation_logo.construct_logo(long_file_mut,primers[i],sequence_target[i],cutoff,output_logo,pam_position,direction)
-
-
-
 
 
 print('\n###################\nCREATION LOGO\n#####################')
