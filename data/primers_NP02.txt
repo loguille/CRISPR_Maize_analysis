@@ -1,0 +1,4 @@
+>primer_forward
+cttctcatcgcccgcttccg
+>primer_reverse
+GAGAAGGTCGTGGAGGTAATC
