@@ -3,12 +3,6 @@
 import sys
 import math
 
-#freq_file = sys.argv[1]
-#primers_file = sys.argv[2]
-#reference_sequence = sys.argv[3]
-#cutOff = float(sys.argv[4])
-#fileOut = sys.argv[5]
-#base_crispr = int(sys.argv[6])
 
 class base():
     def __init__(self, type, text, freq):
@@ -44,8 +38,6 @@ def read_and_cut_primers(filePrimers, target_sequence) :
                 sequence_wo_primers = ligne[forward_primer : -reverse_primer]
     return(sequence_wo_primers)
 
-#def createNewPos(matrix,pos):
-#    matrix[1][pos] = {"A": 0, "T": 0, "C": 0, "G": 0, "D": 0}
 
 def codeSVG(x, y, SVGid, ncl, color="#000000", opacity=1):
     """
@@ -55,8 +47,6 @@ def codeSVG(x, y, SVGid, ncl, color="#000000", opacity=1):
     """
     if str(SVGid).isdigit():
         SVGid = "text" + str(SVGid)
-    #if opacity > 1:
-    #    opacity = 1
     return '''<text
     xml:space="preserve"
     style = "font-style:normal;font-weight:normal;font-size:12px;line-height:1.25;font-family:Courier;letter-spacing:0px;word-pacing:0px;fill:''' + str(color) + ''';fill-opacity:''' + str(opacity) + ''';stroke:none;stroke-width:0.26458332"
@@ -64,22 +54,6 @@ def codeSVG(x, y, SVGid, ncl, color="#000000", opacity=1):
     y = "''' + str(y) + '''"
     id="''' + str(SVGid) + '''">''' + str(ncl) + '''</text>'''
 
-'''
-def limit_crispr_zone(pam_position, seq_wo_prim):
-    pam_seq = ''
-    dico_limit_crispr = {}
-    for i in pam_position :
-        for j in range(i,i+3):
-            pam_seq += seq_wo_prim[j].upper()
-        if pam_seq[:2] == 'CC':
-            dico_limit_crispr[i+4] = i+24
-        else :
-            dico_limit_crispr[i-20] = i
-        print(pam_seq)
-        pam_seq = ''
-    print(dico_limit_crispr)
-    return(dico_limit_crispr) 
-'''
 
 def limit_crispr_zone(pam_position,direction):
     dico_limit_crispr = {}
@@ -93,7 +67,6 @@ def limit_crispr_zone(pam_position,direction):
 
 def construct_logo(freq_file,primers_file,reference_sequence,cutOff,fileOut,base_crispr,direction):
     sequence_wo_primers = read_and_cut_primers(primers_file,reference_sequence)
-    #start_end_dico = limit_crispr_zone(base_crispr,sequence_wo_primers)
     start_end_dico = limit_crispr_zone(base_crispr,direction)
     reads = {}  # list of object base
     maxPos = 0
@@ -126,21 +99,17 @@ def construct_logo(freq_file,primers_file,reference_sequence,cutOff,fileOut,base
     # Calculs matrice sequences #
     ########################
     matrix = [{}, {}]
-    # matrix[0] = seqRef -> {pos:nucleotid}
-    # matrix[1] = seq from reads = {pos:{ncl:frequencie}}
 
     # reference sequence
     pos = 0
     for ncl in sequence_wo_primers:
         matrix[0][pos] = (ncl)
         pos += 1
-    #print(matrix)
     pos = 0
     # other reads
     while pos < maxPos + 1:
         if pos not in matrix[1].keys():
             # create if new position
-            #createNewPos(pos)
             matrix[1][pos] = {"A": 0, "T": 0, "C": 0, "G": 0, "D": 0}
         if pos not in reads.keys():
             # perfect match : no mutation
@@ -154,25 +123,21 @@ def construct_logo(freq_file,primers_file,reference_sequence,cutOff,fileOut,base
                 matrix[1][pos][objBase.text] += objBase.freq
             elif type == 'deletion':
                 # objBase.text = distance = gap number
-                #print(objBase.text)
                 long = len(objBase.text)
                 for i in range(long):
                     if pos + i not in matrix[1].keys():
-                        #createNewPos(pos + i)
                         matrix[1][pos + i] = {"A": 0, "T": 0, "C": 0, "G": 0, "D": 0}
                     matrix[1][pos + i]["D"] += objBase.freq
             elif type == 'insertion':
                 long = len(objBase.text)
                 for i in range(long):
                     if pos + i not in matrix[1].keys():
-                        #createNewPos(pos + i)
                         matrix[1][pos + i] = {"A": 0, "T": 0, "C": 0, "G": 0, "D": 0}
                     matrix[1][pos + i][objBase.text[i]] += objBase.freq #for insertion they add the frequency to the corresponding base
             else:
                 pass
         pos += 1
 
-    #print(matrix)
     ########################
     # Calculs document properties#
     ########################
@@ -231,8 +196,6 @@ def construct_logo(freq_file,primers_file,reference_sequence,cutOff,fileOut,base
     id = 10
 
     # max to min
-    #colors = ["purple","blue","green","red","black"]
-    #colors = ["#7800ff", "#0000ff", "#036b28", "#ff0000", "#000000"]
     colors = ["#7800ff", "#7800ff", "#7800ff", "#7800ff", "#7800ff"]
 
 
