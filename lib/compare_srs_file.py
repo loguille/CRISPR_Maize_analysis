@@ -3,9 +3,7 @@
 import sys
 import collections
 
-#fileone = sys.argv[1]
-#filetwo = sys.argv[2]
-
+#this program will be run in order too compare alignment on different target sequence in srsfile, different srsfile will be create containing the best alignment based on the score
 
 def readfiles(dico_ali,namefile,new_name_file):
     with open(namefile,'r') as first_ali :
@@ -75,9 +73,3 @@ def compare_score(dico):
             fileout.write(dico[i][inte][8][0]+'\n')
             fileout.write(dico[i][inte][9][0]+'\n')
             fileout.write('\n\n')
-        
-#aln = {}
-#for i in range(1,len(sys.argv)):
-    #seqNameref,seqname,score_line_list,score_list,length_list,identity_list,similarity_list, gaps_list, align_target, alignment, align_sequence= readfiles(sys.argv[i],score_line_list,score_list,length_list,identity_list,similarity_list,gaps_list, align_target,alignment,align_sequence)
-#    aln= readfiles(aln,sys.argv[i])
-#compare_score(aln)
