@@ -5,13 +5,6 @@ import re
 import calcul_new_score
 from collections import OrderedDict
 
-#srsFile = sys.argv[1]
-#output_file = sys.argv[2]
-#target_sequence = sys.argv[3] 
-#file_primers = sys.argv[4]
-#Position_PAM=sys.argv[5]
-#length_primer=25 #to define by another method
-#nb_seq=112
 
 class Mutation():
     def __init__(self,type,position,sequence):
@@ -32,7 +25,6 @@ class Read():
         self.mutation = []
         self.freq = 0
         self.correct_freq = 0
-        #self.freq = freq
 
     def addMutation(self,type,position,sequence):
         self.mutation.append(Mutation(type,position,sequence))
@@ -87,14 +79,9 @@ def compareAlign(fileSRS,score_thr):
                         '''
                         insertion = ''
                     elif deletion :
-                        #print(len(deletion))
-                        #length_indel += len(deletion)
-                        #print("deletion "+deletion+" at the position "+str(position-len(deletion)+2))
                         read_mut[ali[read].align_seq].addMutation("deletion",position-length_insertion-len(deletion)+2,deletion)
                         deletion = ''
                     mutation = read_seq[i]
-                    #good_base = target_seq[i] #to have the base from the target sequence
-                    #print(good_base+" to "+mutation+" at the position "+str(i+1))
                     if length_insertion == 0 :
                         read_mut[ali[read].align_seq].addMutation('mismatch',i+1-length_insertion,mutation)
                     else :
@@ -109,13 +96,9 @@ def compareAlign(fileSRS,score_thr):
                 else :
                     if insertion :
                         length_insertion += len(insertion)
-                        #print(length_insertion)
-                        #print("insertion "+insertion+" at the position "+str(position-len(insertion)+2))
                         read_mut[ali[read].align_seq].addMutation("insertion",position-length_insertion+2,insertion)
                         insertion = ''                
                     elif deletion :
-                        #print(len(deletion))
-                        #print("deletion "+deletion+" at the position "+str(position-len(deletion)+2))
                         read_mut[ali[read].align_seq].addMutation("deletion",position-length_insertion-len(deletion)+2,deletion)
                         deletion = ''
                     else :
@@ -182,7 +165,6 @@ def count_frequence(mutations,nbSeq):
     for keys in mutations.keys():
         for i in range(len(mutations[keys])):
             mutations[keys][i][2] = float(mutations[keys][i][2])/float(nbSeq)
-    #sorted(mutations.items(),key=lambda t: t[0])
     return(mutations)
 
 def open_target_file(sequence_target):
@@ -213,19 +195,7 @@ def open_primers_file(primers_file):
             primers_dict[typePrimers].append(line)
     return(primers_dict)
 
-'''
-def return_starting_ending_position(pam_position,target_sequence,len_primer_f):
-    pam_sequence = ''
-    for i in range(len_primer_f+pam_position, len_primer_f+pam_position+3):
-        pam_sequence += target_sequence[i].upper()
-    if pam_sequence[:2] == 'CC' :
-        start = pam_position+4
-        end = pam_position +24
-    else :
-        start = pam_position-20
-        end = pam_position
-    return(start,end) 
-'''
+
 def return_starting_ending_position(pam_position,direction):
     if direction == 'sens' or direction == 'forward':
         start = pam_position-20
@@ -264,20 +234,12 @@ def write_mutations(fileOut, sequence,srs_file,pam_position,primers_file, file_e
         else :
             len_primer_reverse = len(primers[key][0])
     sort_dico_mut = {}
-    
-    #sort_mut_count = {}
     sort_dico_mut = OrderedDict(sorted(mut_dict.items(), key = lambda t: t[0]))
     '''
     We keep the sequence pam in order to test if the sequence start with CC 
     '''
-    
-    #start_pam1,end_pam1 = return_starting_ending_position(Pam_position1,sequence_target,len_primer_forward)
-    #start_pam2,end_pam2 = return_starting_ending_position(Pam_position2,sequence_target,len_primer_forward)
     start_pam1,end_pam1 = return_starting_ending_position(Pam_position1,direction1)
     start_pam2,end_pam2 = return_starting_ending_position(Pam_position2,direction2)
-    #print(start_pam2,end_pam2)
-    #sort_mut_count = OrderedDict(sorted(mut.items(), key = lambda t: t[0]))
-    #print(sort_mut_count)
     '''
     First we have to sort the dictionnary by the key to have the different mutation by ascending position
     '''
@@ -406,8 +368,6 @@ def write_mutations(fileOut, sequence,srs_file,pam_position,primers_file, file_e
     total_count_ins = 0 #count the total number of indel or mismatch 
     total_count_del = 0
     total_count_mis = 0
-    #print(len(sequence_target)-len_primer_reverse-len_primer_forward)
-    #print(nbsequence)
     ''' 
     Here we construct the different name file from the name passed in as entry
     '''
@@ -792,18 +752,4 @@ def write_mutations(fileOut, sequence,srs_file,pam_position,primers_file, file_e
                     corrected_count_del_out_crispr_range = ''
                     corrected_tot_count_del_out_crispr_range = 0
                     list_length_del_out_crispr_range = ''
-                #print(mut_dict[keys][i][2])
-            
-                
-                
-
-
-#align, read = parseSRS(srsFile,length_primer)
-#dict_read, nbsequence = compareAlign(srsFile)
-#mut=concat_mutation(dict_read)
-#mut = concat_mutation_2(dict_read)
-#dict_mut = count_frequence(mut,nbsequence)
-#sequence = open_target_file(target_sequence)
-#open_primers_file(file_primers)
-#write_mutations(output_file,target_sequence,srsFile,Position_PAM,file_primers)
 
